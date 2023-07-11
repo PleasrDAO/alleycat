@@ -1,9 +1,50 @@
-type ExampleToken @entity {
+type Account @entity {
   id: String!
-  tokenId: Int!
-  trait: TokenTrait!
+
+  # distance
+  multiplier: Int!
+  lastDistance: BigInt!
+  lastTimestamp: BigInt!
+
+  #
+  tokens: [Token!]! @derivedFrom(field: "owner")
+  transferFromEvents: [TransferEvent!]! @derivedFrom(field: "from")
+  transferToEvents: [TransferEvent!]! @derivedFrom(field: "to")
+  bikeStolenFromEvents: [BikeStolenEvent!]! @derivedFrom(field: "from")
+  bikeStolenToEvents: [BikeStolenEvent!]! @derivedFrom(field: "to")
 }
-enum TokenTrait {
-  GOOD
-  BAD
+
+type Token @entity {
+  id: String!
+  owner: Account!
+  transferEvents: [TransferEvent!]! @derivedFrom(field: "token")
+  bikeStolenEvents: [BikeStolenEvent!]! @derivedFrom(field: "token")
+
+  # multiplier
+  multiplier: Int!
+
+  # traits
+  background: Int
+  body: Int
+  accessory: Int
+  head: Int
+  glasses: Int
+}
+
+type BikeStolenEvent @entity {
+  id: String!
+  from: Account!
+  to: Account!
+  token: Token!
+  transactionHash: String!
+  timestamp: Int!
+}
+
+type TransferEvent @entity {
+  id: String!
+  from: Account!
+  to: Account!
+  token: Token!
+  transactionHash: String!
+  timestamp: Int!
 }
