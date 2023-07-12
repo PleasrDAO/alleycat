@@ -9,7 +9,7 @@ export const config: Config = {
     {
       network: "anvil",
       name: "Citi",
-      address: "0x1757a98c1333B9dc8D408b194B2279b5AFDF70Cc",
+      address: "0x840748F7Fd3EA956E5f4c88001da5CC1ABCBc038",
       abi: "./abis/Citi.json",
       startBlock: 17671250,
     },

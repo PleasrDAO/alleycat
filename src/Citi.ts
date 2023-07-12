@@ -1,42 +1,29 @@
-import { Citi, ponder } from "@/generated";
-import { zeroAddress } from "viem";
+import { ponder } from "@/generated";
 
-async function fetchAuxForAccount(address: `0x${string}`, citi: Citi) {
-  if (address === zeroAddress) {
-    return { multiplier: 0, lastDistance: BigInt(0), lastTimestamp: BigInt(0) };
-  }
-
-  const [multiplier, lastDistance, lastTimestamp] = await citi.read.getRiderAux(
-    [address]
-  );
-
-  return { multiplier, lastDistance, lastTimestamp };
-}
+const DEFAULT_AUX = {
+  multiplier: 0,
+  lastDistance: BigInt(0),
+  lastTimestamp: BigInt(0),
+};
 
 ponder.on("Citi:Transfer", async ({ event, context }) => {
   const { Account, Token, TransferEvent } = context.entities;
-  const { Citi } = context.contracts;
 
-  const [fromAux, toAux] = await Promise.all([
-    fetchAuxForAccount(event.params.from, Citi),
-    fetchAuxForAccount(event.params.to, Citi),
-  ]);
-
-  // Create an Account for the sender, or update the balance if it already exists.
+  // upsert `from`
   await Account.upsert({
     id: event.params.from,
-    create: { ...fromAux },
-    update: { ...fromAux },
+    create: { ...DEFAULT_AUX },
+    update: {},
   });
 
-  // Create an Account for the recipient, or update the balance if it already exists.
+  // upsert `to`
   await Account.upsert({
     id: event.params.to,
-    create: { ...toAux },
-    update: { ...toAux },
+    create: { ...DEFAULT_AUX },
+    update: {},
   });
 
-  // Create or update a Token.
+  // upsert token
   await Token.upsert({
     id: String(event.params.id),
     create: {
@@ -48,7 +35,7 @@ ponder.on("Citi:Transfer", async ({ event, context }) => {
     },
   });
 
-  // Create a TransferEvent.
+  // create a TransferEvent.
   await TransferEvent.create({
     id: event.log.id,
     data: {
@@ -90,6 +77,19 @@ ponder.on("Citi:BikeRevealed", async ({ event, context }) => {
     data: {
       multiplier,
       ...traits,
+    },
+  });
+});
+
+ponder.on("Citi:RiderAuxUpdated", async ({ event, context }) => {
+  const { Account } = context.entities;
+
+  await Account.update({
+    id: event.params.rider,
+    data: {
+      multiplier: event.params.multiplier,
+      lastDistance: event.params.lastDistance,
+      lastTimestamp: event.params.lastTimestamp,
     },
   });
 });
