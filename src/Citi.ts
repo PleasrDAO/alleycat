@@ -8,6 +8,7 @@ const DEFAULT_AUX = {
 
 ponder.on("Citi:Transfer", async ({ event, context }) => {
   const { Account, Token, TransferEvent } = context.entities;
+  const { Citi } = context.contracts;
 
   // upsert `from`
   await Account.upsert({
@@ -23,14 +24,18 @@ ponder.on("Citi:Transfer", async ({ event, context }) => {
     update: {},
   });
 
+  const cost = await Citi.read.cost([event.params.id]);
+
   // upsert token
   await Token.upsert({
     id: String(event.params.id),
     create: {
+      multiplier: 1, // initialize multiplier to 1
+      cost,
       owner: event.params.to,
-      multiplier: 1,
     },
     update: {
+      cost,
       owner: event.params.to,
     },
   });
@@ -41,6 +46,7 @@ ponder.on("Citi:Transfer", async ({ event, context }) => {
     data: {
       from: event.params.from,
       to: event.params.to,
+      value: event.transaction.value,
       token: String(event.params.id),
       transactionHash: event.transaction.hash,
       timestamp: Number(event.block.timestamp),
@@ -56,6 +62,7 @@ ponder.on("Citi:BikeStolen", async ({ event, context }) => {
     data: {
       from: event.params.from,
       to: event.params.to,
+      value: event.transaction.value,
       token: String(event.params.id),
       transactionHash: event.transaction.hash,
       timestamp: Number(event.block.timestamp),

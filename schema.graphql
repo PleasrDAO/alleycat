@@ -20,8 +20,9 @@ type Token @entity {
   transferEvents: [TransferEvent!]! @derivedFrom(field: "token")
   bikeStolenEvents: [BikeStolenEvent!]! @derivedFrom(field: "token")
 
-  # multiplier
+  # state
   multiplier: Int!
+  cost: BigInt!
 
   # traits
   background: Int
@@ -38,6 +39,7 @@ type BikeStolenEvent @entity {
   token: Token!
   transactionHash: String!
   timestamp: Int!
+  value: BigInt!
 }
 
 type TransferEvent @entity {
@@ -47,4 +49,5 @@ type TransferEvent @entity {
   token: Token!
   transactionHash: String!
   timestamp: Int!
+  value: BigInt!
 }
