@@ -7,15 +7,15 @@
     "abis": "cat ../citi/out/Citi.sol/Citi.json | jq -r '.abi' > abis/Citi.json"
   },
   "dependencies": {
-    "@ponder/core": "latest"
+    "@ponder/core": "^0.0.71"
   },
   "devDependencies": {
-    "@types/node": "^20.4.1",
+    "@types/node": "^20.4.2",
     "@typescript-eslint/parser": "^6.0.0",
-    "abitype": "^0.9.0",
-    "eslint": "^8.44.0",
+    "abitype": "^0.9.2",
+    "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "typescript": "^5.1.6",
-    "viem": "^1.2.13"
+    "viem": "^1.2.15"
   }
 }

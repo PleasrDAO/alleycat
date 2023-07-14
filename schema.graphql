@@ -15,7 +15,7 @@ type Account @entity {
 }
 
 type Token @entity {
-  id: String!
+  id: BigInt!
   owner: Account!
   transferEvents: [TransferEvent!]! @derivedFrom(field: "token")
   bikeStolenEvents: [BikeStolenEvent!]! @derivedFrom(field: "token")

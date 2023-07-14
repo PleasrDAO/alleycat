@@ -28,7 +28,7 @@ ponder.on("Citi:Transfer", async ({ event, context }) => {
 
   // upsert token
   await Token.upsert({
-    id: String(event.params.id),
+    id: event.params.id,
     create: {
       multiplier: 1, // initialize multiplier to 1
       cost,
@@ -47,7 +47,7 @@ ponder.on("Citi:Transfer", async ({ event, context }) => {
       from: event.params.from,
       to: event.params.to,
       value: event.transaction.value,
-      token: String(event.params.id),
+      token: event.params.id,
       transactionHash: event.transaction.hash,
       timestamp: Number(event.block.timestamp),
     },
@@ -63,7 +63,7 @@ ponder.on("Citi:BikeStolen", async ({ event, context }) => {
       from: event.params.from,
       to: event.params.to,
       value: event.transaction.value,
-      token: String(event.params.id),
+      token: event.params.id,
       transactionHash: event.transaction.hash,
       timestamp: Number(event.block.timestamp),
     },
@@ -80,7 +80,7 @@ ponder.on("Citi:BikeRevealed", async ({ event, context }) => {
   ]);
 
   await Token.update({
-    id: String(event.params.id),
+    id: event.params.id,
     data: {
       multiplier,
       ...traits,
