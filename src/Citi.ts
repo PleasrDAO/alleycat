@@ -1,4 +1,5 @@
 import { ponder } from "@/generated";
+import { zeroAddress } from "viem";
 
 const DEFAULT_AUX = {
   multiplier: 0,
@@ -7,7 +8,7 @@ const DEFAULT_AUX = {
 };
 
 ponder.on("Citi:Transfer", async ({ event, context }) => {
-  const { Account, Token, TransferEvent } = context.entities;
+  const { Account, Token, TransferEvent, YoinkEvent } = context.entities;
   const { Citi } = context.contracts;
 
   // upsert `from`
@@ -52,10 +53,37 @@ ponder.on("Citi:Transfer", async ({ event, context }) => {
       timestamp: Number(event.block.timestamp),
     },
   });
+
+  if (event.params.from === zeroAddress) {
+    // is mint
+    await YoinkEvent.create({
+      id: event.log.id,
+      data: {
+        from: undefined,
+        to: event.params.to,
+        token: event.params.id,
+        timestamp: Number(event.block.timestamp),
+        transactionHash: event.transaction.hash,
+        value: event.transaction.value,
+      },
+    });
+  }
 });
 
 ponder.on("Citi:BikeStolen", async ({ event, context }) => {
-  const { BikeStolenEvent } = context.entities;
+  const { BikeStolenEvent, YoinkEvent } = context.entities;
+
+  await YoinkEvent.create({
+    id: event.log.id,
+    data: {
+      from: event.params.from,
+      to: event.params.to,
+      token: event.params.id,
+      timestamp: Number(event.block.timestamp),
+      transactionHash: event.transaction.hash,
+      value: event.transaction.value,
+    },
+  });
 
   await BikeStolenEvent.create({
     id: event.log.id,
