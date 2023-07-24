@@ -19,6 +19,7 @@ type Token @entity {
   owner: Account!
   transferEvents: [TransferEvent!]! @derivedFrom(field: "token")
   bikeStolenEvents: [BikeStolenEvent!]! @derivedFrom(field: "token")
+  yoinkEvents: [YoinkEvent!]! @derivedFrom(field: "token")
 
   # state
   multiplier: Int!
