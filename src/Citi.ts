@@ -1,7 +1,8 @@
 import { ponder } from "@/generated";
 import { zeroAddress } from "viem";
 
-const DEFAULT_AUX = {
+const ACCOUNT_DEFAULTS = {
+  ethAmountEarned: BigInt(0),
   multiplier: 0,
   lastDistance: BigInt(0),
   lastTimestamp: BigInt(0),
@@ -14,14 +15,14 @@ ponder.on("Citi:Transfer", async ({ event, context }) => {
   // upsert `from`
   await Account.upsert({
     id: event.params.from,
-    create: { ...DEFAULT_AUX },
+    create: { ...ACCOUNT_DEFAULTS },
     update: {},
   });
 
   // upsert `to`
   await Account.upsert({
     id: event.params.to,
-    create: { ...DEFAULT_AUX },
+    create: { ...ACCOUNT_DEFAULTS },
     update: {},
   });
 
@@ -109,10 +110,7 @@ ponder.on("Citi:BikeRevealed", async ({ event, context }) => {
 
   await Token.update({
     id: event.params.id,
-    data: {
-      multiplier,
-      ...traits,
-    },
+    data: { multiplier, ...traits },
   });
 });
 
@@ -126,5 +124,20 @@ ponder.on("Citi:RiderAuxUpdated", async ({ event, context }) => {
       lastDistance: event.params.lastDistance,
       lastTimestamp: event.params.lastTimestamp,
     },
+  });
+});
+
+ponder.on("Citi:DollaDollaBillsYall", async ({ event, context }) => {
+  const { Account } = context.entities;
+
+  const to = await Account.findUnique({ id: event.params.to });
+
+  const ethAmountEarned =
+    (to?.ethAmountEarned ?? BigInt(0)) + event.params.value;
+
+  await Account.upsert({
+    id: event.params.to,
+    create: { ...ACCOUNT_DEFAULTS, ethAmountEarned },
+    update: { ethAmountEarned },
   });
 });

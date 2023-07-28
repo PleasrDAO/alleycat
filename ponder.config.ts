@@ -11,7 +11,11 @@ console.log(`Configured with network ${NETWORK}`);
 export const config: Config = {
   networks: [
     // { name: "mainnet", chainId: 1, rpcUrl: process.env.PONDER_RPC_URL_1 },
-    { name: "goerli", chainId: 5, rpcUrl: infuraUrl("goerli") },
+    {
+      name: "arbitrum-goerli",
+      chainId: 5,
+      rpcUrl: infuraUrl("arbitrum-goerli"),
+    },
     { name: "anvil", chainId: 1, rpcUrl: "http://127.0.0.1:8545" },
   ].filter((network) => network.name === NETWORK),
   contracts: [
@@ -23,11 +27,11 @@ export const config: Config = {
       startBlock: 17671250,
     },
     {
-      network: "goerli",
+      network: "arbitrum-goerli",
       name: "Citi",
-      address: "0xA7C2D39345824565ED8868B9625383951931c756" as Address,
+      address: "0x39444F0AD20a012c9549d5D474d0f9321BC3FA11" as Address,
       abi: "./abis/Citi.json",
-      startBlock: 9383592,
+      startBlock: 32095263,
     },
   ].filter((config) => config.network === NETWORK),
 };

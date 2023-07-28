@@ -17,9 +17,19 @@
         "type": "uint256"
       },
       {
-        "internalType": "address",
-        "name": "wrapper",
+        "internalType": "contract VRFCoordinatorV2Interface",
+        "name": "vrfCoordinator",
         "type": "address"
+      },
+      {
+        "internalType": "uint64",
+        "name": "vrfSubscriptionId",
+        "type": "uint64"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "vrfKeyHash",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "nonpayable",
@@ -63,6 +73,27 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "have",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "want",
+        "type": "address"
+      }
+    ],
+    "name": "OnlyCoordinatorCanFulfill",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "RandomnessAlreadyRequested",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "id",
         "type": "uint256"
@@ -74,6 +105,11 @@
   {
     "inputs": [],
     "name": "TheMusicHasStopped",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TheStandardSaysSo",
     "type": "error"
   },
   {
@@ -206,6 +242,44 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      }
+    ],
+    "name": "DollaDollaBillsYall",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "leader",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "prize",
+        "type": "uint256"
+      }
+    ],
+    "name": "GameResolved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "proposed",
         "type": "address"
       },
@@ -217,6 +291,25 @@
       }
     ],
     "name": "LeaderProposed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
     "type": "event"
   },
   {
@@ -315,45 +408,7 @@
         "type": "uint256"
       }
     ],
-    "name": "$tokenForRequestId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "ACCESSORIES",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "BACKGROUNDS",
+    "name": "ACCELERATIONS",
     "outputs": [
       {
         "internalType": "string",
@@ -385,7 +440,7 @@
         "type": "uint256"
       }
     ],
-    "name": "BODIES",
+    "name": "BRAKES",
     "outputs": [
       {
         "internalType": "string",
@@ -404,25 +459,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "GLASSES",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -449,7 +485,7 @@
         "type": "uint256"
       }
     ],
-    "name": "HEADS",
+    "name": "HANDLINGS",
     "outputs": [
       {
         "internalType": "string",
@@ -488,12 +524,63 @@
   },
   {
     "inputs": [],
-    "name": "OPERATOR",
+    "name": "MAX_WORDS",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "uint32",
         "name": "",
-        "type": "address"
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "REVEAL_BATCH_SIZE",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "SPEEDS",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "TRACTIONS",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -531,6 +618,30 @@
         "internalType": "uint256",
         "name": "result",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "checkUpkeep",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
       }
     ],
     "stateMutability": "view",
@@ -684,9 +795,9 @@
     "name": "getSeed",
     "outputs": [
       {
-        "internalType": "uint88",
+        "internalType": "uint40",
         "name": "seed",
-        "type": "uint88"
+        "type": "uint40"
       }
     ],
     "stateMutability": "view",
@@ -706,27 +817,27 @@
         "components": [
           {
             "internalType": "uint8",
-            "name": "background",
+            "name": "acceleration",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "body",
+            "name": "brake",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "accessory",
+            "name": "speed",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "head",
+            "name": "handling",
             "type": "uint8"
           },
           {
             "internalType": "uint8",
-            "name": "glasses",
+            "name": "traction",
             "type": "uint8"
           }
         ],
@@ -776,6 +887,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -797,6 +921,19 @@
   {
     "inputs": [
       {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "name": "performUpkeep",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "proposed",
         "type": "address"
@@ -811,12 +948,12 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_requestId",
+        "name": "",
         "type": "uint256"
       },
       {
         "internalType": "uint256[]",
-        "name": "_randomWords",
+        "name": "randomWords",
         "type": "uint256[]"
       }
     ],
@@ -973,6 +1110,19 @@
     "name": "transferFrom",
     "outputs": [],
     "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
