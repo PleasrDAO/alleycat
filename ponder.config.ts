@@ -13,7 +13,7 @@ export const config: Config = {
     // { name: "mainnet", chainId: 1, rpcUrl: process.env.PONDER_RPC_URL_1 },
     {
       name: "arbitrum-goerli",
-      chainId: 5,
+      chainId: 421613,
       rpcUrl: infuraUrl("arbitrum-goerli"),
     },
     { name: "anvil", chainId: 1, rpcUrl: "http://127.0.0.1:8545" },
