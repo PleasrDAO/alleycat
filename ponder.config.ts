@@ -6,11 +6,8 @@ const NETWORK = process.env.NETWORK ?? "anvil";
 const infuraUrl = (chain: string) =>
   `https://${chain}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`;
 
-console.log(`Configured with network ${NETWORK}`);
-
 export const config: Config = {
   networks: [
-    // { name: "mainnet", chainId: 1, rpcUrl: process.env.PONDER_RPC_URL_1 },
     {
       name: "arbitrum-goerli",
       chainId: 421613,
@@ -35,3 +32,7 @@ export const config: Config = {
     },
   ].filter((config) => config.network === NETWORK),
 };
+
+console.log(
+  `Configured with network ${NETWORK} and contract ${config.contracts?.[0]?.address}`
+);
