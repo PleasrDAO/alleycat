@@ -26,9 +26,9 @@ export const config: Config = {
     {
       network: "arbitrum-goerli",
       name: "Citi",
-      address: "0x91C259b9261593873d9705A2d85b6448e531BbB1" as Address,
+      address: "0x69432E26fc35eFBD1cd64E371fe1bCBA5a2253A7" as Address,
       abi: "./abis/Citi.json",
-      startBlock: 32436830,
+      startBlock: 32599423,
     },
   ].filter((config) => config.network === NETWORK),
 };
