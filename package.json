@@ -10,11 +10,11 @@
     "@ponder/core": "^0.0.78"
   },
   "devDependencies": {
-    "@types/node": "^20.4.5",
-    "@typescript-eslint/parser": "^6.2.0",
+    "@types/node": "^20.4.8",
+    "@typescript-eslint/parser": "^6.3.0",
     "abitype": "^0.9.6",
     "eslint": "^8.46.0",
-    "eslint-config-prettier": "^8.9.0",
+    "eslint-config-prettier": "^9.0.0",
     "typescript": "^5.1.6",
     "viem": "^1.4.2"
   }
