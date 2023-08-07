@@ -1,20 +1,24 @@
 import type { Config } from "@ponder/core";
 import { Address } from "viem";
 
-const NETWORK = process.env.NETWORK ?? "anvil";
+const NETWORK = (process.env.NETWORK ?? "anvil") as "anvil" | "arbitrum-goerli";
 
 const infuraUrl = (chain: string) =>
   `https://${chain}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`;
 
 export const config: Config = {
-  networks: [
-    {
+  network: {
+    anvil: {
+      name: "anvil",
+      chainId: 1,
+      rpcUrl: "http://127.0.0.1:8545",
+    },
+    "arbitrum-goerli": {
       name: "arbitrum-goerli",
       chainId: 421613,
       rpcUrl: infuraUrl("arbitrum-goerli"),
     },
-    { name: "anvil", chainId: 1, rpcUrl: "http://127.0.0.1:8545" },
-  ].filter((network) => network.name === NETWORK),
+  }[NETWORK],
   contracts: [
     {
       network: "anvil",
@@ -26,9 +30,9 @@ export const config: Config = {
     {
       network: "arbitrum-goerli",
       name: "Citi",
-      address: "0x2a205Ecc5573E5aA9C6493599cc9ddFDB872995a" as Address,
+      address: "0x0d50883543595Dc2E0C009DCBBD2d8ECf9b31F3E" as Address,
       abi: "./abis/Citi.json",
-      startBlock: 32816388,
+      startBlock: 33317104,
     },
   ].filter((config) => config.network === NETWORK),
 };
