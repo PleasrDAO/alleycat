@@ -1,38 +1,40 @@
 import type { Config } from "@ponder/core";
 import { Address } from "viem";
 
-const NETWORK = (process.env.NETWORK ?? "anvil") as "anvil" | "arbitrum-goerli";
-
-const infuraUrl = (chain: string) =>
-  `https://${chain}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`;
+const NETWORK = (process.env.NETWORK ?? "anvil") as "anvil" | "base-goerli";
 
 export const config: Config = {
-  network: {
-    anvil: {
+  networks: [
+    {
       name: "anvil",
       chainId: 1,
       rpcUrl: "http://127.0.0.1:8545",
     },
-    "arbitrum-goerli": {
-      name: "arbitrum-goerli",
+    {
+      name: "base-goerli",
       chainId: 421613,
-      rpcUrl: infuraUrl("arbitrum-goerli"),
+      rpcUrl: process.env.QUICKNODE_BASE_GOERLI_RPC,
     },
-  }[NETWORK],
+    {
+      name: "base",
+      chainId: 8453,
+      rpcUrl: process.env.QUICKNODE_BASE_MAINNET_RPC,
+    },
+  ].filter((n) => n.name === NETWORK),
   contracts: [
     {
       network: "anvil",
       name: "Citi",
-      address: "0x38F6F2caE52217101D7CA2a5eC040014b4164E6C" as Address,
+      address: "0xfFa47545acDC01Afa06Cc1eb02E86f6120fE575C" as Address,
       abi: "./abis/Citi.json",
-      startBlock: 17671250,
+      startBlock: 0,
     },
     {
-      network: "arbitrum-goerli",
+      network: "base-goerli",
       name: "Citi",
-      address: "0x4643b1BCc5EADdF7b9B15a1a406c2d41D0c0DBe8" as Address,
+      address: "0x26ec37464e7CB82bf105B8e6fCbBE6E24637a678" as Address,
       abi: "./abis/Citi.json",
-      startBlock: 33858673,
+      startBlock: 8464437,
     },
   ].filter((config) => config.network === NETWORK),
 };

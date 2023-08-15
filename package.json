@@ -7,7 +7,7 @@
     "abis": "cat ../citi/out/Citi.sol/Citi.json | jq -r '.abi' > abis/Citi.json"
   },
   "dependencies": {
-    "@ponder/core": "^0.0.81-next.0"
+    "@ponder/core": "^0.0.84"
   },
   "devDependencies": {
     "@types/node": "^20.4.8",
