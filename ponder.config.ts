@@ -32,9 +32,9 @@ export const config: Config = {
     {
       network: "base-goerli",
       name: "Citi",
-      address: "0x6B378a2F14283426ACf49520403C5f5167F9Fe69" as Address,
+      address: "0x0d50883543595Dc2E0C009DCBBD2d8ECf9b31F3E" as Address,
       abi: "./abis/Citi.json",
-      startBlock: 8597004,
+      startBlock: 8721779,
     },
   ].filter((config) => config.network === NETWORK),
 };
