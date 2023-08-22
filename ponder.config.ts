@@ -1,26 +1,28 @@
 import type { Config } from "@ponder/core";
 import { Address } from "viem";
 
-const NETWORK = (process.env.NETWORK ?? "anvil") as "anvil" | "base-goerli";
+const CHAIN_ID = parseInt(process.env.CHAIN_ID ?? "31337");
+
+const NETWORK = [
+  {
+    name: "anvil",
+    chainId: 31337,
+    rpcUrl: "http://127.0.0.1:8545",
+  },
+  {
+    name: "base-goerli",
+    chainId: 84531,
+    rpcUrl: process.env.QUICKNODE_BASE_GOERLI_RPC,
+  },
+  {
+    name: "base",
+    chainId: 8453,
+    rpcUrl: process.env.QUICKNODE_BASE_MAINNET_RPC,
+  },
+].find((n) => n.chainId === CHAIN_ID)!;
 
 export const config: Config = {
-  networks: [
-    {
-      name: "anvil",
-      chainId: 1,
-      rpcUrl: "http://127.0.0.1:8545",
-    },
-    {
-      name: "base-goerli",
-      chainId: 421613,
-      rpcUrl: process.env.QUICKNODE_BASE_GOERLI_RPC,
-    },
-    {
-      name: "base",
-      chainId: 8453,
-      rpcUrl: process.env.QUICKNODE_BASE_MAINNET_RPC,
-    },
-  ].filter((n) => n.name === NETWORK),
+  networks: [NETWORK],
   contracts: [
     {
       network: "anvil",
@@ -32,13 +34,16 @@ export const config: Config = {
     {
       network: "base-goerli",
       name: "Citi",
-      address: "0x1E592CAE37cD174a78632dD58221CE256947F6E3" as Address,
+      address: "0xC49517548f55D2db8155bb8815EF1f2E69E4a0bC" as Address,
       abi: "./abis/Citi.json",
-      startBlock: 8721779,
+      startBlock: 8767199,
     },
-  ].filter((config) => config.network === NETWORK),
+    {
+      network: "base",
+      name: "Citi",
+      address: "" as Address,
+      abi: "./abis/Citi.json",
+      startBlock: 0,
+    },
+  ].filter((config) => config.network === NETWORK.name),
 };
-
-console.log(
-  `Configured with network ${NETWORK} and contract ${config.contracts?.[0]?.address}`
-);
