@@ -41,9 +41,9 @@ export const config: Config = {
     {
       network: "base",
       name: "Citi",
-      address: "" as Address,
+      address: "0x9B91C9bD27F1b4bE0D0452115849ef7d8bC0a0e8" as Address,
       abi: "./abis/Citi.json",
-      startBlock: 0,
+      startBlock: 2970031,
     },
   ].filter((config) => config.network === NETWORK.name),
 };
